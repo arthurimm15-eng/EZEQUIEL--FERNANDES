@@ -18,7 +18,7 @@ const ADDRESS = "Av. Atlântica, 5441 - sala 5 - Parque Atlântico, São Paulo -
 
 function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
+    const els = document.querySelectorAll(".reveal, .reveal-title");
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -488,10 +488,10 @@ function Modalities() {
       </div>
       <div
         ref={scrollerRef}
-        className="no-scrollbar snap-x-mandatory flex gap-5 overflow-x-auto px-[7.5vw] md:px-[calc(50vw-260px)] pb-4 scroll-smooth cursor-grab active:cursor-grabbing select-none"
+        className="no-scrollbar snap-x-mandatory flex gap-5 overflow-x-auto md:overflow-visible md:flex-wrap md:justify-center px-[7.5vw] md:px-6 md:max-w-5xl md:mx-auto pb-4 scroll-smooth cursor-grab md:cursor-default active:cursor-grabbing select-none"
       >
         {items.map((m, i) => (
-          <article key={i} className="snap-center border border-[#E0E8F0] p-8 md:p-10 shrink-0 w-[85vw] md:w-[520px] bg-white">
+          <article key={i} className="snap-center border border-[#E0E8F0] p-8 md:p-10 shrink-0 w-[85vw] md:w-[460px] bg-white">
             {m.icon}
             <div className="eyebrow text-[#B0A090] mb-3">{m.tag}</div>
             <h3 className="font-display text-[#0D2E4D] text-2xl md:text-3xl font-semibold mb-3">{m.title}</h3>
@@ -499,7 +499,7 @@ function Modalities() {
           </article>
         ))}
       </div>
-      <div className="flex justify-center gap-2 mt-8">
+      <div className="flex justify-center gap-2 mt-8 md:hidden">
         {items.map((_, i) => (
           <span key={i} className={`h-1.5 rounded-full transition-all duration-300 ${active === i ? "w-6 bg-[#1A5276]" : "w-1.5 bg-[#1A5276]/30"}`} />
         ))}
@@ -538,8 +538,9 @@ function Testimonials() {
     const el = scrollerRef.current;
     if (!el) return;
     let idx = 0;
+    const isDesktop = () => window.matchMedia("(min-width: 768px)").matches;
     const interval = setInterval(() => {
-      if (pausedRef.current || !el) return;
+      if (pausedRef.current || !el || isDesktop()) return;
       idx = (idx + 1) % items.length;
       const card = el.children[idx] as HTMLElement | undefined;
       if (card) {
@@ -620,12 +621,12 @@ function Testimonials() {
         onMouseLeave={resume}
         onTouchStart={pause}
         onTouchEnd={() => setTimeout(resume, 2000)}
-        className="no-scrollbar snap-x-mandatory flex gap-5 overflow-x-auto px-[7.5vw] md:px-[calc(50vw-230px-0.625rem)] pb-6 scroll-smooth cursor-grab active:cursor-grabbing"
+        className="md:hidden no-scrollbar snap-x-mandatory flex gap-5 overflow-x-auto px-[7.5vw] pb-6 scroll-smooth cursor-grab active:cursor-grabbing"
       >
         {items.map((t, i) => (
           <article
             key={i}
-            className="snap-center glass p-8 md:p-10 shrink-0 w-[85vw] md:w-[460px]"
+            className="snap-center glass p-8 md:p-10 shrink-0 w-[85vw]"
           >
             <div className="flex items-center gap-3 mb-5">
               <img
@@ -650,7 +651,36 @@ function Testimonials() {
           </article>
         ))}
       </div>
-      <div className="flex justify-center gap-2 mt-8">
+      <div className="hidden md:grid md:grid-cols-3 gap-5 max-w-6xl mx-auto px-6">
+        {items.map((t, i) => (
+          <article
+            key={i}
+            className="glass p-8 md:p-10"
+          >
+            <div className="flex items-center gap-3 mb-5">
+              <img
+                src={t.avatar}
+                alt={t.name}
+                loading="lazy"
+                className="w-11 h-11 rounded-full object-cover ring-1 ring-white/15"
+              />
+              <div>
+                <div className="text-white font-medium text-sm">{t.name}</div>
+                <div className="text-white/40 text-[11px]">{t.meta}</div>
+              </div>
+            </div>
+            <div className="flex gap-1 mb-5 text-[#F5C518]">
+              {Array.from({ length: 5 }).map((_, j) => (
+                <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+              ))}
+            </div>
+            <p className="font-display italic text-white/85 text-lg md:text-xl leading-relaxed">
+              "{t.text}"
+            </p>
+          </article>
+        ))}
+      </div>
+      <div className="md:hidden flex justify-center gap-2 mt-8">
         {items.map((_, i) => (
           <span
             key={i}
