@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { MeshGradient } from "@paper-design/shaders-react";
 import { motion, useScroll, useSpring, useTransform, useMotionValueEvent } from "framer-motion";
-import ezequielAsset from "@/assets/ezequiel.png.asset.json";
-import honorataAsset from "@/assets/honorata.png.asset.json";
-import lucasAsset from "@/assets/lucas.png.asset.json";
-import piranAsset from "@/assets/piran.png.asset.json";
+import ezequielImg from "@/assets/ezequiel.png";
+import honorataImg from "@/assets/honorata.png";
+import lucasImg from "@/assets/lucas.png";
+import piranImg from "@/assets/piran.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -234,7 +234,7 @@ function About() {
             style={{ background: "linear-gradient(135deg, #0D2E4D 0%, #1A5276 100%)" }}
           >
             <img
-              src={ezequielAsset.url}
+              src={ezequielImg}
               alt="Ezequiel Fernandes, psicólogo clínico"
               className="w-full h-full object-cover"
             />
@@ -513,19 +513,19 @@ function Testimonials() {
     {
       name: "Honorata Lima",
       meta: "9 avaliações · 3 meses atrás",
-      avatar: honorataAsset.url,
+      avatar: honorataImg,
       text: "Ezequiel é um profissional excelente! Muito objetivo, mas ao mesmo tempo empático, conduzindo o tratamento com excelência! Faz realmente o paciente se avaliar, refletir. Em poucas sessões conseguiu me conduzir a acessar crenças limitantes que eu não havia percebido que tinha, já tinha feito terapia antes por anos e demorava muito tempo para conseguir acessar essas questões.",
     },
     {
       name: "Lucas Amaral",
       meta: "3 avaliações · um ano atrás",
-      avatar: lucasAsset.url,
+      avatar: lucasImg,
       text: "Excelente profissional, muito atencioso e dedicado. Explica tudo com clareza e realmente busca o melhor para o cliente. Recomendo de olhos fechados!",
     },
     {
       name: "Piran Motu",
       meta: "1 review · 2 meses atrás",
-      avatar: piranAsset.url,
+      avatar: piranImg,
       text: "Profissionais excelentes, sem dúvidas os melhores da região. Trabalham sempre com muita dedicação e compromisso, e o resultado é um trabalho de altíssimo nível. Indico de olhos fechados!",
     },
   ];
