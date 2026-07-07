@@ -6,6 +6,7 @@ import ezequielImg from "@/assets/ezequiel.png";
 import honorataImg from "@/assets/honorata.png";
 import lucasImg from "@/assets/lucas.png";
 import piranImg from "@/assets/piran.png";
+import CardFanCarousel from "@/components/ui/card-fan-carousel";
 import espaco1 from "@/assets/espaco-1.webp";
 import espaco2 from "@/assets/espaco-2.webp";
 import espaco3 from "@/assets/espaco-3.webp";
@@ -283,10 +284,10 @@ function Process() {
     { n: "03", title: "Autonomia", body: "Você desenvolve recursos internos para fazer escolhas mais conscientes e satisfatórias." },
   ];
   return (
-    <section className="relative bg-[#0A1E30] py-24 md:py-32 px-6 overflow-hidden">
-      <div className="absolute inset-0 opacity-40 pointer-events-none"
+    <section className="relative bg-[#0A1E30] py-24 md:py-32 overflow-visible">
+      <div className="absolute inset-0 opacity-40 pointer-events-none overflow-hidden"
         style={{ background: "radial-gradient(circle at 20% 30%, rgba(26,82,118,0.4), transparent 50%)" }}/>
-      <div className="relative max-w-6xl mx-auto">
+      <div className="relative max-w-6xl mx-auto px-6">
         <div className="reveal mb-16 max-w-2xl">
           <div className="eyebrow text-[#B0A090] mb-6">O processo terapêutico</div>
           <h2 className="reveal-title font-display text-white font-semibold leading-tight"
@@ -294,28 +295,26 @@ function Process() {
             Da primeira sessão<br/>à mudança real.
           </h2>
         </div>
-        <div className="grid md:grid-cols-3 gap-5">
-          {steps.map((s, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.7, delay: i * 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="glass relative p-8 md:p-10 rounded-sm overflow-hidden"
-            >
-              <span className="absolute top-2 right-4 font-display text-white/[0.06] font-bold pointer-events-none"
-                style={{ fontSize: "120px", lineHeight: 1 }}>
-                {s.n}
-              </span>
-              <div className="relative">
-                <div className="eyebrow text-[#B0A090] mb-6">Etapa {s.n}</div>
-                <h3 className="font-display text-white text-2xl md:text-3xl mb-4 font-semibold">{s.title}</h3>
-                <p className="text-white/65 leading-relaxed text-sm">{s.body}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+      </div>
+      <div className="relative">
+          <CardFanCarousel
+            cardClassName="w-[220px] h-[300px] sm:w-[240px] sm:h-[320px] md:w-[280px] md:h-[380px] lg:w-[300px] lg:h-[400px]"
+            cards={steps.map((s) => ({
+              content: (
+                <div className="glass relative w-full h-full p-6 md:p-8 rounded-sm overflow-hidden flex flex-col justify-center">
+                  <span className="absolute top-2 right-4 font-display text-white/[0.06] font-bold pointer-events-none"
+                    style={{ fontSize: "90px", lineHeight: 1 }}>
+                    {s.n}
+                  </span>
+                  <div className="relative">
+                    <div className="eyebrow text-[#B0A090] mb-4 md:mb-6">Etapa {s.n}</div>
+                    <h3 className="font-display text-white text-xl md:text-2xl mb-3 md:mb-4 font-semibold">{s.title}</h3>
+                    <p className="text-white/65 leading-relaxed text-sm">{s.body}</p>
+                  </div>
+                </div>
+              ),
+            }))}
+          />
       </div>
     </section>
   );
