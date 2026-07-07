@@ -6,6 +6,10 @@ import ezequielImg from "@/assets/ezequiel.png";
 import honorataImg from "@/assets/honorata.png";
 import lucasImg from "@/assets/lucas.png";
 import piranImg from "@/assets/piran.png";
+import espaco1 from "@/assets/espaco-1.webp";
+import espaco2 from "@/assets/espaco-2.webp";
+import espaco3 from "@/assets/espaco-3.webp";
+import espaco4 from "@/assets/espaco-4.webp";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -48,6 +52,7 @@ function Index() {
       <Modalities />
       <Testimonials />
       <FinalCTA />
+      <OurSpace />
       <LocationMap />
       <Footer />
       <WhatsAppFloat />
@@ -712,6 +717,45 @@ function FinalCTA() {
             className="bg-white text-[#0D2E4D] px-8 py-4 rounded-[4px] font-medium inline-flex items-center justify-center gap-3">
             Falar pelo WhatsApp
           </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function OurSpace() {
+  const photos = [
+    { src: espaco1, alt: "Sala de espera do consultório" },
+    { src: espaco2, alt: "Ambiente de acolhimento com poltronas" },
+    { src: espaco3, alt: "Recepção do consultório" },
+    { src: espaco4, alt: "Fachada do prédio do consultório" },
+  ];
+  return (
+    <section className="bg-[#F0F4F8] py-24 md:py-32 px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="reveal mb-14 max-w-2xl">
+          <div className="eyebrow text-[#1A5276] mb-6">Conheça o espaço</div>
+          <h2 className="reveal-title font-display text-[#0D2E4D] font-semibold leading-tight"
+            style={{ fontSize: "clamp(32px, 4.5vw, 52px)" }}>
+            Um ambiente pensado<br/>para acolher você.
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 gap-4 md:gap-5">
+          {photos.map((p, i) => (
+            <div
+              key={i}
+              className={`reveal relative overflow-hidden rounded-sm border border-[#E0E8F0] bg-white ${
+                i === 0 ? "col-span-2 md:col-span-1 md:row-span-2 aspect-[4/3] md:aspect-[3/4]" : "aspect-[4/3]"
+              }`}
+            >
+              <img
+                src={p.src}
+                alt={p.alt}
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </section>
