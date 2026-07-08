@@ -730,33 +730,89 @@ function OurSpace() {
     { src: espaco3, alt: "Recepção do consultório" },
     { src: espaco4, alt: "Fachada do prédio do consultório" },
   ];
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const dragRef = useRef({ isDown: false, startX: 0, scrollLeft: 0 });
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const center = el.scrollLeft + el.clientWidth / 2;
+      let closest = 0, minDist = Infinity;
+      Array.from(el.children).forEach((c, i) => {
+        const child = c as HTMLElement;
+        const cc = child.offsetLeft + child.clientWidth / 2 - el.offsetLeft;
+        const d = Math.abs(center - cc);
+        if (d < minDist) { minDist = d; closest = i; }
+      });
+      setActive(closest);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    const onDown = (e: MouseEvent) => {
+      dragRef.current.isDown = true;
+      dragRef.current.startX = e.pageX - el.offsetLeft;
+      dragRef.current.scrollLeft = el.scrollLeft;
+      el.style.cursor = "grabbing";
+      el.style.scrollSnapType = "none";
+    };
+    const onMove = (e: MouseEvent) => {
+      if (!dragRef.current.isDown) return;
+      e.preventDefault();
+      const x = e.pageX - el.offsetLeft;
+      el.scrollLeft = dragRef.current.scrollLeft - (x - dragRef.current.startX) * 1.2;
+    };
+    const onUp = () => {
+      if (!dragRef.current.isDown) return;
+      dragRef.current.isDown = false;
+      el.style.cursor = "";
+      el.style.scrollSnapType = "";
+    };
+    el.addEventListener("mousedown", onDown);
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseup", onUp);
+    el.addEventListener("mouseleave", onUp);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      el.removeEventListener("mousedown", onDown);
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseup", onUp);
+      el.removeEventListener("mouseleave", onUp);
+    };
+  }, []);
+
   return (
-    <section className="bg-[#F0F4F8] py-24 md:py-32 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="reveal mb-14 max-w-2xl">
-          <div className="eyebrow text-[#1A5276] mb-6">Conheça o espaço</div>
-          <h2 className="reveal-title font-display text-[#0D2E4D] font-semibold leading-tight"
-            style={{ fontSize: "clamp(32px, 4.5vw, 52px)" }}>
-            Um ambiente pensado<br/>para acolher você.
-          </h2>
-        </div>
-        <div className="grid grid-cols-2 gap-4 md:gap-5">
-          {photos.map((p, i) => (
-            <div
-              key={i}
-              className={`reveal relative overflow-hidden rounded-sm border border-[#E0E8F0] bg-white ${
-                i === 0 ? "col-span-2 md:col-span-1 md:row-span-2 aspect-[4/3] md:aspect-[3/4]" : "aspect-[4/3]"
-              }`}
-            >
-              <img
-                src={p.src}
-                alt={p.alt}
-                loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
-          ))}
-        </div>
+    <section className="bg-[#F0F4F8] py-24 md:py-32 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 reveal">
+        <div className="eyebrow text-[#1A5276] mb-6">Conheça o espaço</div>
+        <h2 className="reveal-title font-display text-[#0D2E4D] font-semibold leading-tight mb-14"
+          style={{ fontSize: "clamp(32px, 4.5vw, 52px)" }}>
+          Um ambiente pensado<br/>para acolher você.
+        </h2>
+      </div>
+      <div
+        ref={scrollerRef}
+        className="no-scrollbar snap-x-mandatory flex gap-5 overflow-x-auto px-[7.5vw] md:px-[calc(50vw-260px)] pb-4 scroll-smooth cursor-grab active:cursor-grabbing select-none"
+      >
+        {photos.map((p, i) => (
+          <div
+            key={i}
+            className="snap-center relative overflow-hidden rounded-sm border border-[#E0E8F0] bg-white shrink-0 w-[85vw] md:w-[520px] aspect-[4/3]"
+          >
+            <img
+              src={p.src}
+              alt={p.alt}
+              loading="lazy"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+              draggable={false}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-center gap-2 mt-8">
+        {photos.map((_, i) => (
+          <span key={i} className={`h-1.5 rounded-full transition-all duration-300 ${active === i ? "w-6 bg-[#1A5276]" : "w-1.5 bg-[#1A5276]/30"}`} />
+        ))}
       </div>
     </section>
   );
